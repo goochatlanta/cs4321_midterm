@@ -9,7 +9,7 @@ def get_images_ds(hparams, type_ds):
         subset = 'training'
     
     ds = tf.keras.preprocessing.image_dataset_from_directory(
-        directory=hparams.image_dir+ '/' +type_ds,
+        directory=hparams.image_dir,
         validation_split = 0.2,
         subset = subset,
         seed = hparams.seed,
