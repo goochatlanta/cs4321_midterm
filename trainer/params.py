@@ -36,7 +36,7 @@ def make_argparser():
     parser.add_argument('--test_dir', type=str)
     parser.add_argument('--train_dir', type=str)
     parser.add_argument('--val_dir', type=str)
-    parser.add_argument('--image_dir', type=str, default='/data/cs4321/KCAteam/data')
+    parser.add_argument('--image_dir', type=str, default='/data/cs4321/KCAteam/data/merged')
     parser.add_argument('--model_type', type=str, default='fully_connected',
                         help="the type of model to use. allowed inputs are fully_connected and cnn")
     parser.add_argument('--regression', type=str2bool, default=False,
