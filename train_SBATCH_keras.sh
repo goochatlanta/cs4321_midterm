@@ -16,10 +16,9 @@ source activate tfEnv
 
 python trainer/task.py \
 --model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S)/" \
---model_type="no_hidden" \
+--model_type="MobileNetV2_frozen" \
 --num_epochs=100 \
---batch_size=10 \
---num_classes=10 \
+--batch_size=32 \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
 --callback_list="checkpoint, csv_log"

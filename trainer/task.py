@@ -42,7 +42,7 @@ def main():
     # import data
     train_ds = data_class.get_train_ds(hparams)
     val_ds = data_class.get_val_ds(hparams)
-    test_ds = data_class.get_test_ds(hparams)
+    #test_ds = data_class.get_test_ds(hparams)
     
 
     #Generate the model to train
@@ -62,7 +62,7 @@ def main():
     history = model.fit(train_ds,
                         epochs=hparams.num_epochs,
                         validation_data = val_ds,
-                                callbacks=callbacks.make_callbacks(hparams))
+                        callbacks=callbacks.make_callbacks(hparams))
 
     with open(os.path.join(hparams.model_dir, "history.pickle"), 'wb') as f:
         pickle.dump(history.history, f)

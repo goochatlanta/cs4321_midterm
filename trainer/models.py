@@ -17,12 +17,31 @@ def create_no_hidden(hparams):
     ])
     return model
 
+
+def create_MobileNetV2_frozen(hparams):
+    
+    base_model = tf.keras.applications.MobileNetV2(
+        weights='imagenet',include_top=False
+    )
+
+    
+    x = base_model.output
+    x = tf.keras.layers.GlobalAveragePooling2D()(x)
+    preds = tf.keras.layers.Dense(hparams.amount_of_labels, activation='softmax')(x) #final layer with softmax activation
+
+
+    model = tf.keras.Model(inputs=base_model.input, outputs=preds)
+
+
+    for layer in model.layers[:-1]:
+        layer.trainable = False
+
+    return model
+
 def create_model(hparams):
     model_type = hparams.model_type.lower()
-    if model_type == 'fully_connected':
-        return create_fully_connected_model(hparams)
-    elif model_type == 'no_hidden':
-        return create_no_hidden(hparams)
+    if model_type == 'mobilenetv2_frozen':
+        return create_MobileNetV2_frozen(hparams)
     #elif model_type == 'cnn_model':
     #    return create_cnn_model(hparams)
     else:

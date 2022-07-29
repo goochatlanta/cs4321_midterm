@@ -41,8 +41,8 @@ def make_argparser():
                         help="the type of model to use. allowed inputs are fully_connected and cnn")
     parser.add_argument('--regression', type=str2bool, default=False,
                         help="is it a regression model")
-    parser.add_argument('--input_shape', type=int, default=(28, 28),
-                        help="the type of model to use. allowed inputs are fully_connected and cnn")
+    parser.add_argument('--input_image_sizes', type=int, default=(299, 299),
+                        help="The size of the images")
     parser.add_argument('--continue_training', type=str2bool, default=False,
                         help="continue training from a checkpoint")
     parser.add_argument('--checkpoint_path', type=str,
@@ -51,11 +51,15 @@ def make_argparser():
                         help="predict from a checkpoint, use checkpoint flag to pass a model")
 #    parser.add_argument('--num_classes', type=int, default=2,
 #                        help="the type of model to use. allowed inputs are fully_connected and cnn")
+    parser.add_argument('--seed', type=int, default=1337,
+                        help="the seed")
 
     parser.add_argument('--num_epochs', type=int, default=2,
                         help="the number of epochs")
     parser.add_argument('--batch_size', type=int, default=32,
                         help="The batch size to use in the training")
+    parser.add_argument('--amount_of_labels', type=int, default=8,
+                        help="The amount of lalbels on the last layer")
 
     parser.add_argument("--optimizer", type=str, default="adam",
                         help="specify the optimizer for the model")

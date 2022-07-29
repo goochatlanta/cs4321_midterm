@@ -1,19 +1,25 @@
+from re import sub
 import tensorflow as tf
 
 
-image_size = (180, 180)
-batch_size = 32
-
-
 def get_images_ds(hparams, type_ds):
+    subset = type_ds
+
+    if subset == 'train':
+        subset = 'training'
+    
     ds = tf.keras.preprocessing.image_dataset_from_directory(
         directory=hparams.image_dir+ '/' +type_ds,
-        validation_split=0,
-        subset = type_ds,
-        seed = 1337,
-        image_size = hparams.image_size,
-        batch_size=hparams.batch_size
+        validation_split = 0.2,
+        subset = subset,
+        seed = hparams.seed,
+        image_size = hparams.input_image_sizes,
+        batch_size=hparams.batch_size,
+        label_mode='categorical'
     )
+
+    #print(type_ds, " Has a shape of", ds.shape)
+
 
     return ds
 
