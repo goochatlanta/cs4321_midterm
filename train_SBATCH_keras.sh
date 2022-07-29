@@ -15,7 +15,7 @@ module load lang/miniconda3/4.10.3
 source activate tfEnv
 
 python trainer/task.py \
---model_dir="/data/cs4321/KCAteam/models/midterm_$(cat $USER)_$(date +%Y-%m-%d_%H-%M-%S)/" \
+--model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S)/" \
 --model_type="no_hidden" \
 --num_epochs=100 \
 --batch_size=10 \
