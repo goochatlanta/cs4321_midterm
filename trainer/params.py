@@ -31,11 +31,12 @@ import yaml
 
 
 def make_argparser():
-    parser = argparse.ArgumentParser(description='Arguments to run training for GestureRecognitionModeling')
+    parser = argparse.ArgumentParser(description='Arguments to run training for our CS4321 MidTerm')
     parser.add_argument('--model_dir', type=str, required=True)
     parser.add_argument('--test_dir', type=str)
     parser.add_argument('--train_dir', type=str)
     parser.add_argument('--val_dir', type=str)
+    parser.add_argument('--image_dir', type=str, default='/data/cs4321/KCAteam/data')
     parser.add_argument('--model_type', type=str, default='fully_connected',
                         help="the type of model to use. allowed inputs are fully_connected and cnn")
     parser.add_argument('--regression', type=str2bool, default=False,
@@ -48,20 +49,18 @@ def make_argparser():
                         help="path to the checkpoint to continue training")
     parser.add_argument('--predict', type=str2bool, default=False,
                         help="predict from a checkpoint, use checkpoint flag to pass a model")
-    parser.add_argument('--num_classes', type=int, default=2,
-                        help="the type of model to use. allowed inputs are fully_connected and cnn")
+#    parser.add_argument('--num_classes', type=int, default=2,
+#                        help="the type of model to use. allowed inputs are fully_connected and cnn")
 
     parser.add_argument('--num_epochs', type=int, default=2,
-                        help="the type of model to use. allowed inputs are fully_connected and cnn")
-    parser.add_argument('--batch_size', type=int, default=6,
-                        help="the type of model to use. allowed inputs are fully_connected and cnn")
+                        help="the number of epochs")
+    parser.add_argument('--batch_size', type=int, default=32,
+                        help="The batch size to use in the training")
 
     parser.add_argument("--optimizer", type=str, default="adam",
                         help="specify the optimizer for the model")
     parser.add_argument("--callback_list", type=str, default=None,
                         help="the callbacks to be added")
-    parser.add_argument("--activation_fn", type=str, default="relu",
-                        help="specify the hidden layer activation function for the model")
     parser.add_argument("--base_learning_rate", type=int, default=0.001,
                         help="specify the base learning rate for the specified optimizer for the model")
     parser.add_argument("--loss_type", type=str, default="categorical_crossentropy",

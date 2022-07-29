@@ -22,6 +22,7 @@ import yaml
 import tensorflow as tf
 import params
 import models
+import data_class
 import optimizers
 import numpy as np
 import pickle
@@ -39,18 +40,12 @@ def main():
     params.save_hparams(hparams)
 
     # import data
+    train_ds = data_class.get_train_ds(hparams)
+    val_ds = data_class.get_val_ds(hparams)
+    test_ds = data_class.get_test_ds(hparams)
+    
 
-    mnist = tf.keras.datasets.mnist
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-
-    # %% make one_hot_encoded
-    trainY = tf.keras.utils.to_categorical(y_train)
-    testY = tf.keras.utils.to_categorical(y_test)
-
-    # Lets look at few data samples
-    print('Train: X=%s, y=%s' % (x_train.shape, y_train.shape))
-    print('Test: X=%s, y=%s' % (x_test.shape, y_test.shape))
-
+    #Generate the model to train
     model = models.create_model(hparams)
 
     model.summary()
@@ -61,9 +56,12 @@ def main():
 
     print(model.summary())
 
-    history = model.fit(x_train,trainY,
-                                epochs=hparams.num_epochs,
-                                validation_split=0.2,
+
+    #Train the model
+
+    history = model.fit(train_ds,
+                        epochs=hparams.num_epochs,
+                        validation_data = val_ds,
                                 callbacks=callbacks.make_callbacks(hparams))
 
     with open(os.path.join(hparams.model_dir, "history.pickle"), 'wb') as f:
