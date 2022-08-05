@@ -1,5 +1,7 @@
 from re import sub
 import tensorflow as tf
+from tensorflow import keras
+import keras_cv
 
 
 def get_images_ds(hparams, type_ds):
@@ -17,6 +19,7 @@ def get_images_ds(hparams, type_ds):
         batch_size=hparams.batch_size,
         label_mode='categorical'
     )
+    print('**********************',list(ds)[0])
 
     #print(type_ds, " Has a shape of", ds.shape)
 
@@ -33,3 +36,9 @@ def get_val_ds(hparams):
 
 def get_test_ds(hparams):
     return get_images_ds(hparams, 'test')
+
+def random_agm(inputs):
+    rand_augment = keras_cv.layers.RandAugment(
+    value_range=(0, 255), augmentations_per_image=3, magnitude=0.5
+    )
+    return rand_augment(inputs)

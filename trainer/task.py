@@ -41,6 +41,8 @@ def main():
 
     # import data
     train_ds = data_class.get_train_ds(hparams)
+    print('-------------DATA ARE AUGMENTED-------------------')
+    train_ds = data_class.random_agm(train_ds)
     val_ds = data_class.get_val_ds(hparams)
     #test_ds = data_class.get_test_ds(hparams)
     
