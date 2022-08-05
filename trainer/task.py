@@ -42,7 +42,7 @@ def main():
     # import data
     train_ds = data_class.get_train_ds(hparams)
     print('-------------DATA ARE AUGMENTED-------------------')
-    train_ds = data_class.random_agm(train_ds)
+    train_ds = train_ds.map(lambda x,y: (data_class.random_agm(x), y))
     val_ds = data_class.get_val_ds(hparams)
     #test_ds = data_class.get_test_ds(hparams)
     
