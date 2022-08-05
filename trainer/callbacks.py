@@ -9,6 +9,8 @@ def make_callbacks(hparams):
         checkpoints.append(_make_model_checkpoint_cb(hparams))
     if 'csv_log' in hparams.callback_list:
         checkpoints.append(_make_csvlog_cb(hparams))
+    if 'tensor_board' in hparams.callback_list:
+        checkpoints.append(_make_tensorboard(hparams))
     return checkpoints
 
 
@@ -38,3 +40,8 @@ def _make_csvlog_cb(hparams):
     print("entered_csv_log")
     csv_log = tf.keras.callbacks.CSVLogger(os.path.join(hparams.model_dir, "log.csv"), append=True, separator=';')
     return csv_log
+
+def _make_tensorboard(hparams):
+    print("entered_csv_log")
+    tb_log = tf.keras.callbacks.TensorBoard(log_dir=os.path.join(hparams.model_dir, histogram_freq=1 ))
+    return tb_log
