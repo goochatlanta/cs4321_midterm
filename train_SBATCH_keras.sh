@@ -12,7 +12,12 @@
 
 module load lang/miniconda3/4.10.3
 
-source activate cs4321
+if  [ $USER == "alon.kukliansky.is" ]
+then
+    source activate tfEnv
+else
+    source activate cs4321
+fi
 
 python trainer/task.py \
 --model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S)/" \
