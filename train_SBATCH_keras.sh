@@ -2,7 +2,7 @@
 #SBATCH --job-name=KCAteam_cs4321_run
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:2
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=6
 #SBATCH --mem=16G
 #SBATCH --time=01:00:00
 #SBATCH --output=./logs_hamming/titans-out-%j.txt
