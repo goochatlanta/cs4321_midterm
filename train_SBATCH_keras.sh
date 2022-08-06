@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=KCAteam_cs4321_run
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:4
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --time=01:00:00
+#SBATCH --time=05:00:00
 #SBATCH --output=./logs_hamming/titans-out-%j.txt
 #SBATCH --partition=beards
 
@@ -21,7 +21,7 @@ python trainer/task.py \
 --batch_size=32 \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
---callback_list="checkpoint, csv_log"
+--callback_list="tensor_board"
 
 
 

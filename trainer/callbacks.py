@@ -42,6 +42,6 @@ def _make_csvlog_cb(hparams):
     return csv_log
 
 def _make_tensorboard(hparams):
-    print("entered_csv_log")
-    tb_log = tf.keras.callbacks.TensorBoard(log_dir=os.path.join(hparams.model_dir, histogram_freq=1 ))
+    print("entered_tf_log")
+    tb_log = tf.keras.callbacks.TensorBoard(log_dir=os.path.join(hparams.model_dir), histogram_freq=1 )
     return tb_log
