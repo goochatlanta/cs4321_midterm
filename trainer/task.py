@@ -42,7 +42,7 @@ def main():
     # import data
     train_ds = data_class.get_train_ds(hparams)
     
-    #train_ds = train_ds.map(lambda x,y: (data_class.random_agm(x), y))
+    
     val_ds = data_class.get_val_ds(hparams)
     #test_ds = data_class.get_test_ds(hparams)
     
@@ -50,7 +50,7 @@ def main():
     #Generate the model to train
     model = models.create_model(hparams)
     
-    model.summary()
+    #model.summary()
     model.compile(optimizer=optimizers.get_optimizer(hparams),
                                    loss=hparams.loss_type,
                                    metrics=[hparams.eval_metrics])

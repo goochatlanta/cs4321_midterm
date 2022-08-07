@@ -67,6 +67,8 @@ def make_argparser():
                         help="the callbacks to be added")
     parser.add_argument("--base_learning_rate", type=int, default=0.001,
                         help="specify the base learning rate for the specified optimizer for the model")
+    parser.add_argument("--constant_learning_rate_epochs", type=int, default=15,
+                        help="specify how many epoch the learning rate will remain constant and not decrease")
     parser.add_argument("--loss_type", type=str, default="categorical_crossentropy",
                         help=" loss type: Options [categorical_crossentropy | binary_crossentropy]")
     parser.add_argument("--eval_metrics", type=str, default=None,
