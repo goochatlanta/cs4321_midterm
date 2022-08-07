@@ -34,8 +34,8 @@ def make_argparser():
     parser = argparse.ArgumentParser(description='Arguments to run training for our CS4321 MidTerm')
     parser.add_argument('--model_dir', type=str, required=True)
     parser.add_argument('--test_dir', type=str, default='/data/cs4321/KCAteam/data/test')
-    parser.add_argument('--train_dir', type=str)
-    parser.add_argument('--val_dir', type=str)
+    parser.add_argument('--train_dir', type=str, default='/data/cs4321/KCAteam/data/train')
+    parser.add_argument('--val_dir', type=str, default='/data/cs4321/KCAteam/data/validation')
     parser.add_argument('--image_dir', type=str, default='/data/cs4321/KCAteam/data/merged')
     parser.add_argument('--model_type', type=str, default='fully_connected',
                         help="the type of model to use. allowed inputs are fully_connected and cnn")

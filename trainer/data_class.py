@@ -5,21 +5,18 @@ import keras_cv
 
 
 def get_images_ds(hparams, type_ds):
-    subset = type_ds
 
-    if subset == 'train' or subset == 'validation':
-        subset = 'training'
+    if type_ds == 'train':
     
         ds = tf.keras.preprocessing.image_dataset_from_directory(
-            directory=hparams.image_dir,
-            validation_split = 0.2,
-            subset = subset,
+            directory=hparams.train_dir,
+            validation_split = None,
             seed = hparams.seed,
             image_size = hparams.input_image_sizes,
             batch_size=hparams.batch_size,
             label_mode='categorical'
         )
-    elif subset == 'test':
+    elif type_ds == 'test':
 
         ds = tf.keras.preprocessing.image_dataset_from_directory(
             directory=hparams.test_dir,
@@ -27,6 +24,15 @@ def get_images_ds(hparams, type_ds):
             seed = hparams.seed,
             batch_size = hparams.batch_size,
             image_size = hparams.input_image_sizes,
+            label_mode='categorical'
+        )
+    elif type_ds == 'validation':
+        ds = tf.keras.preprocessing.image_dataset_from_directory(
+            directory=hparams.val_dir,
+            validation_split = None,
+            seed = hparams.seed,
+            image_size = hparams.input_image_sizes,
+            batch_size=hparams.batch_size,
             label_mode='categorical'
         )
     return ds
