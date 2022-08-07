@@ -19,16 +19,12 @@ def get_images_ds(hparams, type_ds):
         batch_size=hparams.batch_size,
         label_mode='categorical'
     )
-    print('**********************',list(ds)[0])
-
-    #print(type_ds, " Has a shape of", ds.shape)
-
 
     return ds
 
 
-def get_train_ds(hparams):
-    return get_images_ds(hparams,'train')
+#def get_train_ds(hparams):
+#    return get_images_ds(hparams,'train')
     
 
 def get_val_ds(hparams):
@@ -37,8 +33,40 @@ def get_val_ds(hparams):
 def get_test_ds(hparams):
     return get_images_ds(hparams, 'test')
 
-def random_agm(inputs):
-    rand_augment = keras_cv.layers.RandAugment(
-    value_range=(0, 255), augmentations_per_image=3, magnitude=0.5
-    )
-    return rand_augment(inputs)
+def get_train_ds(hparams):
+    augmentation_type = hparams.model_type.lower()
+    dataset = get_images_ds(hparams,'train')
+    if hparams.data_augmentation_list:
+        data_augmentation_list = []
+
+        if 'random_augmentation' in hparams.data_augmentation_list:
+            data_augmentation_list.append(
+                keras_cv.layers.RandAugment(
+                    value_range=(0, 255), augmentations_per_image=3, magnitude=0.5)
+            )
+        if 'random_flip' in hparams.data_augmentation_list:
+            data_augmentation_list.append(
+                keras_cv.layers.RandomFlip()
+            )
+        if 'MixUp' in hparams.data_augmentation_list:
+            data_augmentation_list.append(
+                keras_cv.layers.MixUp(alpha=0.3)
+            )
+        
+        
+        def augment_data(images,labels):
+            inputs = {"images": images, "labels": labels}
+            for layer in data_augmentation_list:
+                inputs = layer(inputs)
+            return inputs['images'], inputs['labels']
+        
+        if len(data_augmentation_list)>0:
+            print('Data are augmented')
+            dataset = dataset.map(augment_data)
+        
+    else:
+        print('unsupported augmentation type %s' % (augmentation_type))
+        print('model will be trained in the initial dataset')
+    return dataset
+
+

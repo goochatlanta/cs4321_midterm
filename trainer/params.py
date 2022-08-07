@@ -81,6 +81,8 @@ def make_argparser():
                         help="specifys weather to use use_multiprocessing in .fit_genrator method ")
     parser.add_argument("--workers", type=int, default=6,
                         help="number of CPU's, for my machine 6 workers, for Juno 18")
+    parser.add_argument('--data_augmentation_list', type=str, default=None,
+                        help='specify the data augmentation type. it can be more than one')
     return parser.parse_args()
 
 

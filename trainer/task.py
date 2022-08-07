@@ -41,24 +41,19 @@ def main():
 
     # import data
     train_ds = data_class.get_train_ds(hparams)
-    print('-------------DATA ARE AUGMENTED-------------------')
-    train_ds = train_ds.map(lambda x,y: (data_class.random_agm(x), y))
+    
+    #train_ds = train_ds.map(lambda x,y: (data_class.random_agm(x), y))
     val_ds = data_class.get_val_ds(hparams)
     #test_ds = data_class.get_test_ds(hparams)
     
 
     #Generate the model to train
     model = models.create_model(hparams)
-
+    
     model.summary()
-
     model.compile(optimizer=optimizers.get_optimizer(hparams),
                                    loss=hparams.loss_type,
                                    metrics=[hparams.eval_metrics])
-
-    print(model.summary())
-
-
     #Train the model
 
     history = model.fit(train_ds,
@@ -68,6 +63,8 @@ def main():
 
     with open(os.path.join(hparams.model_dir, "history.pickle"), 'wb') as f:
         pickle.dump(history.history, f)
+    #save model
+    model.save(hparams.model_dir+'/'+hparams.model_type.lower())
 
 
 if __name__ == "__main__":

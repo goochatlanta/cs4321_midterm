@@ -35,6 +35,7 @@ def create_MobileNetV2_frozen(hparams):
 
     for layer in model.layers[:-1]:
         layer.trainable = False
+    
 
     return model
 
