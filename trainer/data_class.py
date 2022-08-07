@@ -10,15 +10,26 @@ def get_images_ds(hparams, type_ds):
     if subset == 'train':
         subset = 'training'
     
-    ds = tf.keras.preprocessing.image_dataset_from_directory(
-        directory=hparams.image_dir,
-        validation_split = 0.2,
-        subset = subset,
-        seed = hparams.seed,
-        image_size = hparams.input_image_sizes,
-        batch_size=hparams.batch_size,
-        label_mode='categorical'
-    )
+        ds = tf.keras.preprocessing.image_dataset_from_directory(
+            directory=hparams.image_dir,
+            validation_split = 0.2,
+            subset = subset,
+            seed = hparams.seed,
+            image_size = hparams.input_image_sizes,
+            batch_size=hparams.batch_size,
+            label_mode='categorical'
+        )
+    elif subset == 'test':
+
+        ds = tf.keras.preprocessing.image_dataset_from_directory(
+            directory=hparams.test_dir,
+            validation_split = None,
+            seed = hparams.seed,
+            batch_size = hparams.batch_size,
+            image_size = hparams.input_image_sizes,
+            label_mode='categorical'
+        )
+
 
     return ds
 

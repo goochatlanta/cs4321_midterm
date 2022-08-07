@@ -33,7 +33,7 @@ import yaml
 def make_argparser():
     parser = argparse.ArgumentParser(description='Arguments to run training for our CS4321 MidTerm')
     parser.add_argument('--model_dir', type=str, required=True)
-    parser.add_argument('--test_dir', type=str)
+    parser.add_argument('--test_dir', type=str, default='/data/cs4321/KCAteam/data/test')
     parser.add_argument('--train_dir', type=str)
     parser.add_argument('--val_dir', type=str)
     parser.add_argument('--image_dir', type=str, default='/data/cs4321/KCAteam/data/merged')
@@ -85,6 +85,8 @@ def make_argparser():
                         help="number of CPU's, for my machine 6 workers, for Juno 18")
     parser.add_argument('--data_augmentation_list', type=str, default=None,
                         help='specify the data augmentation type. it can be more than one')
+    parser.add_argument('--only_test_model_dir', type=str, default=None,
+                        help='specify the folder that contains the model to test')
     return parser.parse_args()
 
 
