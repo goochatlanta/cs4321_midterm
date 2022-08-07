@@ -23,7 +23,7 @@ python trainer/task.py \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
 --callback_list="tensor_board, csv_log, checkpoint, learning_rate_scheduler" \
---data_augmentation="random_flip" \
+--data_augmentation="random_flip, random_augmentation, MixUp" \
 #--only_test_model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-07_03-29-09/"
 
 

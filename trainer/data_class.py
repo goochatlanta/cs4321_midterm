@@ -7,7 +7,7 @@ import keras_cv
 def get_images_ds(hparams, type_ds):
     subset = type_ds
 
-    if subset == 'train':
+    if subset == 'train' or subset == 'validation':
         subset = 'training'
     
         ds = tf.keras.preprocessing.image_dataset_from_directory(
@@ -29,8 +29,6 @@ def get_images_ds(hparams, type_ds):
             image_size = hparams.input_image_sizes,
             label_mode='categorical'
         )
-
-
     return ds
 
 
