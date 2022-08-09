@@ -46,6 +46,7 @@ def main():
 
         #Generate the model to train
         model = models.create_model(hparams)
+        report.tsne_visualize(train_ds)
 
         #model.summary()
         model.compile(optimizer=optimizers.get_optimizer(hparams),

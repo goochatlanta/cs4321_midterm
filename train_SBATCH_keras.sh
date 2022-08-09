@@ -24,8 +24,8 @@ python trainer/task.py \
 --optimizer="adam" \
 --callback_list="tensor_board, csv_log, checkpoint" \
 --data_augmentation="random_flip, MixUp" \
---num_fine_epochs=6 \
---frozen_layers=100 \
+--num_fine_epochs=10 \
+--unfrozen_layers=100 \
 #--only_test_model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-07_03-29-09/"
 
 
