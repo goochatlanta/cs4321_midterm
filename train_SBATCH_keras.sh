@@ -12,20 +12,33 @@
 
 module load lang/miniconda3/4.10.3
 
-    source activate tfEnv
+source activate tfEnv
 
 
 python trainer/task.py \
+<<<<<<< HEAD
 --model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S)/" \
 --model_type="mobilenetv2" \
 --num_epochs=1 \
+=======
+--model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S-%N)/" \
+--model_type="MobileNetV2" \
+--num_epochs=10 \
+>>>>>>> ac14f7681073ec859b5ee94e0c0cf8c6f0203290
 --batch_size=32 \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
 --callback_list="tensor_board, csv_log, checkpoint" \
+<<<<<<< HEAD
 --data_augmentation="random_flip, MixUp, random_augmentation" \
 --num_fine_epochs=1 \
 --unfrozen_layers=70 \
+=======
+--data_augmentation="random_flip, MixUp" \
+--num_fine_epochs=6 \
+--unfrozen_layers=100 \
+--length_of_dense_layers=400 \
+>>>>>>> ac14f7681073ec859b5ee94e0c0cf8c6f0203290
 #--only_test_model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-07_03-29-09/"
 
 
