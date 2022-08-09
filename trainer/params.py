@@ -33,9 +33,9 @@ import yaml
 def make_argparser():
     parser = argparse.ArgumentParser(description='Arguments to run training for our CS4321 MidTerm')
     parser.add_argument('--model_dir', type=str, required=True)
-    parser.add_argument('--test_dir', type=str)
-    parser.add_argument('--train_dir', type=str)
-    parser.add_argument('--val_dir', type=str)
+    parser.add_argument('--test_dir', type=str, default='/data/cs4321/KCAteam/data/test')
+    parser.add_argument('--train_dir', type=str, default='/data/cs4321/KCAteam/data/train')
+    parser.add_argument('--val_dir', type=str, default='/data/cs4321/KCAteam/data/validation')
     parser.add_argument('--image_dir', type=str, default='/data/cs4321/KCAteam/data/merged')
     parser.add_argument('--model_type', type=str, default='fully_connected',
                         help="the type of model to use. allowed inputs are fully_connected and cnn")
@@ -65,8 +65,10 @@ def make_argparser():
                         help="specify the optimizer for the model")
     parser.add_argument("--callback_list", type=str, default=None,
                         help="the callbacks to be added")
-    parser.add_argument("--base_learning_rate", type=int, default=0.001,
+    parser.add_argument("--base_learning_rate", type=int, default=0.005,
                         help="specify the base learning rate for the specified optimizer for the model")
+    parser.add_argument("--constant_learning_rate_epochs", type=int, default=40,
+                        help="specify how many epoch the learning rate will remain constant and not decrease")
     parser.add_argument("--loss_type", type=str, default="categorical_crossentropy",
                         help=" loss type: Options [categorical_crossentropy | binary_crossentropy]")
     parser.add_argument("--eval_metrics", type=str, default=None,
@@ -81,6 +83,16 @@ def make_argparser():
                         help="specifys weather to use use_multiprocessing in .fit_genrator method ")
     parser.add_argument("--workers", type=int, default=6,
                         help="number of CPU's, for my machine 6 workers, for Juno 18")
+    parser.add_argument('--data_augmentation_list', type=str, default=None,
+                        help='specify the data augmentation type. it can be more than one')
+    parser.add_argument('--only_test_model_dir', type=str, default=None,
+                        help='specify the folder that contains the model to test')
+    parser.add_argument('--num_fine_epochs', type=int, default=40,
+                        help="the number of fine tunning epochs")
+    parser.add_argument('--unfrozen_layers', type=int, default=70,
+                        help="how many layers to be unfrozen")
+    parser.add_argument('--length_of_dense_layers',nargs="+" ,type=int, default=[200],
+                        help="Specifiy the lengths of the dense laeyers before the last softmax")
     return parser.parse_args()
 
 

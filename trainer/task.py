@@ -17,6 +17,7 @@
 
 import os
 import sys
+from tabnanny import verbose
 import yaml
 
 import tensorflow as tf
@@ -27,47 +28,68 @@ import optimizers
 import numpy as np
 import pickle
 import callbacks
+import report
 
 
 
 def main():
 
     hparams = params.get_hparams()
+    if not hparams.only_test_model_dir:
+        if not os.path.exists(hparams.model_dir):
+            os.mkdir(hparams.model_dir)
+        params.save_hparams(hparams)
 
-    if not os.path.exists(hparams.model_dir):
-        os.mkdir(hparams.model_dir)
+        # import data
+        train_ds = data_class.get_train_ds(hparams)
+        val_ds = data_class.get_val_ds(hparams)
 
-    params.save_hparams(hparams)
+        #Generate the model to train
+        model = models.create_model(hparams)
+        #report.tsne_visualize(train_ds)
 
-    # import data
-    train_ds = data_class.get_train_ds(hparams)
-    print('-------------DATA ARE AUGMENTED-------------------')
-    train_ds = train_ds.map(lambda x,y: (data_class.random_agm(x), y))
-    val_ds = data_class.get_val_ds(hparams)
-    #test_ds = data_class.get_test_ds(hparams)
-    
+        #model.summary()
+        model.compile(optimizer=optimizers.get_optimizer(hparams),
+                                       loss=hparams.loss_type,
+                                       metrics=[hparams.eval_metrics])
+        #Train the model
+        history = model.fit(train_ds,
+                            epochs=hparams.num_epochs,
+                            validation_data = val_ds,
+                            callbacks=callbacks.make_callbacks(hparams),
+                            verbose=2)
 
-    #Generate the model to train
-    model = models.create_model(hparams)
+        with open(os.path.join(hparams.model_dir, "history.pickle"), 'wb') as f:
+            pickle.dump(history.history, f)
 
-    model.summary()
+        #save model
+        model.save(hparams.model_dir+'/'+hparams.model_type.lower())
+        print('report for freezed model')
+        report.test_model(hparams,model)
+        model=models.unfreeze_model(hparams, model)
 
-    model.compile(optimizer=optimizers.get_optimizer(hparams),
-                                   loss=hparams.loss_type,
-                                   metrics=[hparams.eval_metrics])
+        #change the optimizer
+        hparams.optimizer = 'SGD'
+        
+        model.compile(optimizer=optimizers.get_optimizer(hparams),
+                                       loss=hparams.loss_type,
+                                       metrics=[hparams.eval_metrics])
 
-    print(model.summary())
+        history_fine = model.fit(train_ds,
+                            epochs=(hparams.num_epochs+hparams.num_fine_epochs),
+                            initial_epoch = hparams.num_epochs,
+                            validation_data = val_ds,
+                            callbacks=callbacks.make_callbacks(hparams),
+                            verbose=2)
+        with open(os.path.join(hparams.model_dir, "history_fine.pickle"), 'wb') as f:
+            pickle.dump(history_fine.history, f)
+        report.test_model(hparams,model)
 
-
-    #Train the model
-
-    history = model.fit(train_ds,
-                        epochs=hparams.num_epochs,
-                        validation_data = val_ds,
-                        callbacks=callbacks.make_callbacks(hparams))
-
-    with open(os.path.join(hparams.model_dir, "history.pickle"), 'wb') as f:
-        pickle.dump(history.history, f)
+    else:
+        model = tf.keras.models.load_model(hparams.only_test_model_dir+hparams.model_type.lower())
+        print('load the trained model')
+        hparams.model_dir = hparams.only_test_model_dir
+        report.test_model(hparams, model)
 
 
 if __name__ == "__main__":

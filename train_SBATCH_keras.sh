@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=KCAteam_cs4321_run
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:2
-#SBATCH --cpus-per-task=6
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --time=01:00:00
+#SBATCH --time=06:00:00
 #SBATCH --output=./logs_hamming/titans-out-%j.txt
 #SBATCH --partition=beards
 
@@ -12,21 +12,23 @@
 
 module load lang/miniconda3/4.10.3
 
-if  [ $USER == "alon.kukliansky.is" ]
-then
-    source activate tfEnv
-else
-    source activate cs4321
-fi
+source activate tfEnv
+
 
 python trainer/task.py \
---model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S)/" \
---model_type="MobileNetV2_frozen" \
---num_epochs=100 \
+--model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S-%N)/" \
+--model_type="MobileNetV2" \
+--num_epochs=10 \
 --batch_size=32 \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
---callback_list="checkpoint, csv_log"
+--callback_list="tensor_board, csv_log, checkpoint" \
+--data_augmentation="random_flip, MixUp, random_augmentation" \
+--num_fine_epochs=1 \
+--unfrozen_layers=70 \
+--length_of_dense_layers=400 \
+#--only_test_model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-07_03-29-09/"
+
 
 
 
