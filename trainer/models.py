@@ -24,10 +24,13 @@ def create_model_from_app(hparams, model_type):
 
     if (model_type == 'mobilenetv2'):
         app = tf.keras.applications.MobileNetV2
+        preprocess = tf.keras.applications.mobilenet_v2.preprocess_input
     elif (model_type == 'vgg16'):
         app = tf.keras.applications.VGG16
+        preprocess = tf.keras.applications.vgg16.preprocess_input
     elif (model_type == 'resnet50'):
         app = tf.keras.applications.ResNet50
+        preprocess = tf.keras.applications.resnet50.preprocess_input
     
     
     base_model = app(
@@ -35,7 +38,7 @@ def create_model_from_app(hparams, model_type):
     )
 
     inputs = tf.keras.Input(shape=IMG_SHAPE)
-    x= app.preprocess_input(inputs)
+    x= preprocess(inputs)
     x = base_model.output
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
     x = tf.keras.layers.Dense(200, activation='sigmoid')(x)
