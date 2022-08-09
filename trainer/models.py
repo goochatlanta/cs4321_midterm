@@ -18,15 +18,24 @@ def create_no_hidden(hparams):
     return model
 
 
-def create_MobileNetV2_frozen(hparams):
+def create_model_from_app(hparams, model_type):
 
     IMG_SHAPE = hparams.input_image_sizes + (3,)
-    base_model = tf.keras.applications.MobileNetV2(
+
+    if (model_type == 'mobilenetv2'):
+        app = tf.keras.applications.MobileNetV2
+    elif (model_type == 'vgg16'):
+        app = tf.keras.applications.VGG16
+    elif (model_type == 'resnet50'):
+        app = tf.keras.applications.ResNet50
+    
+    
+    base_model = app(
         weights='imagenet',include_top=False,input_shape=IMG_SHAPE
     )
 
-    inputs = tf.keras.Input(shape=(299, 299, 3))
-    x= tf.keras.applications.mobilenet_v2.preprocess_input(inputs)
+    inputs = tf.keras.Input(shape=IMG_SHAPE)
+    x= app.preprocess_input(inputs)
     x = base_model.output
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
     x = tf.keras.layers.Dense(200, activation='sigmoid')(x)
@@ -42,8 +51,8 @@ def create_MobileNetV2_frozen(hparams):
 
 def create_model(hparams):
     model_type = hparams.model_type.lower()
-    if model_type == 'mobilenetv2':
-        return create_MobileNetV2_frozen(hparams)
+    if model_type in ['mobilenetv2' ,'resnet50', 'vgg16']:
+        return create_model_from_app(hparams, model_type)
     #elif model_type == 'cnn_model':
     #    return create_cnn_model(hparams)
     else:
