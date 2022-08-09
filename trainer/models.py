@@ -41,7 +41,8 @@ def create_model_from_app(hparams, model_type):
     x= preprocess(inputs)
     x = base_model.output
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
-    x = tf.keras.layers.Dense(200, activation='sigmoid')(x)
+    for len in hparams.length_of_dense_layers:
+        x = tf.keras.layers.Dense(len, activation='sigmoid')(x)
     preds = tf.keras.layers.Dense(hparams.amount_of_labels, activation='softmax')(x) #final layer with softmax activation
     model = tf.keras.Model(inputs=base_model.input, outputs=preds)
 
