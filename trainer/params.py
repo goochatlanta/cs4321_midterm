@@ -89,8 +89,8 @@ def make_argparser():
                         help='specify the folder that contains the model to test')
     parser.add_argument('--num_fine_epochs', type=int, default=40,
                         help="the number of fine tunning epochs")
-    parser.add_argument('--frozen_layers', type=int, default=70,
-                        help="how many layers to be frozen")
+    parser.add_argument('--unfrozen_layers', type=int, default=70,
+                        help="how many layers to be unfrozen")
     return parser.parse_args()
 
 

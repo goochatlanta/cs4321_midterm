@@ -79,6 +79,8 @@ def main():
                             verbose=2)
         with open(os.path.join(hparams.model_dir, "history_fine.pickle"), 'wb') as f:
             pickle.dump(history_fine.history, f)
+        report.test_model(hparams,model)
+
     else:
         model = tf.keras.models.load_model(hparams.only_test_model_dir+hparams.model_type.lower())
         print('load the trained model')

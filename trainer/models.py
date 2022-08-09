@@ -25,7 +25,7 @@ def create_MobileNetV2_frozen(hparams):
         weights='imagenet',include_top=False,input_shape=IMG_SHAPE
     )
 
-    inputs = tf.keras.Input(shape=(160, 160, 3))
+    inputs = tf.keras.Input(shape=(299, 299, 3))
     x= tf.keras.applications.mobilenet_v2.preprocess_input(inputs)
     x = base_model.output
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
@@ -50,6 +50,6 @@ def create_model(hparams):
         return None
 
 def unfreeze_model(hparams,model):
-    for layer in model.layers[hparams.frozen_layers:]:
+    for layer in model.layers[-hparams.unfrozen_layers:]:
         layer.trainable = True
     return model
