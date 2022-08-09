@@ -7,6 +7,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--user', type=str, default='')
 parser.add_argument('--delete', type=str, default=None)
+parser.add_argument('--delete_dir', type=str, default=None)
 args = parser.parse_args()
 
 list_of_files = glob.glob(f'/data/cs4321/KCAteam/models/*{args.user}*')

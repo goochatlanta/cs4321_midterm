@@ -46,7 +46,7 @@ def main():
 
         #Generate the model to train
         model = models.create_model(hparams)
-        report.tsne_visualize(train_ds)
+        #report.tsne_visualize(train_ds)
 
         #model.summary()
         model.compile(optimizer=optimizers.get_optimizer(hparams),
@@ -68,6 +68,9 @@ def main():
         report.test_model(hparams,model)
         model=models.unfreeze_model(hparams, model)
 
+        #change the optimizer
+        hparams.optimizer = 'SGD'
+        
         model.compile(optimizer=optimizers.get_optimizer(hparams),
                                        loss=hparams.loss_type,
                                        metrics=[hparams.eval_metrics])

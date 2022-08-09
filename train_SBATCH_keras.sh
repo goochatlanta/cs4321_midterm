@@ -17,15 +17,15 @@ module load lang/miniconda3/4.10.3
 
 python trainer/task.py \
 --model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S)/" \
---model_type="MobileNetV2" \
---num_epochs=10 \
+--model_type="mobilenetv2" \
+--num_epochs=1 \
 --batch_size=32 \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
 --callback_list="tensor_board, csv_log, checkpoint" \
---data_augmentation="random_flip, MixUp" \
---num_fine_epochs=10 \
---unfrozen_layers=100 \
+--data_augmentation="random_flip, MixUp, random_augmentation" \
+--num_fine_epochs=1 \
+--unfrozen_layers=70 \
 #--only_test_model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-07_03-29-09/"
 
 
