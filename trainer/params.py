@@ -91,6 +91,8 @@ def make_argparser():
                         help="the number of fine tunning epochs")
     parser.add_argument('--unfrozen_layers', type=int, default=70,
                         help="how many layers to be unfrozen")
+    parser.add_argument('--length_of_dense_layers',nargs="+" ,type=int, default=[200],
+                        help="Specifiy the lengths of the dense laeyers before the last softmax")
     return parser.parse_args()
 
 
