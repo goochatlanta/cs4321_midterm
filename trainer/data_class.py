@@ -5,6 +5,7 @@ import keras_cv
 
 
 def get_images_ds(hparams, type_ds):
+    
 
     if type_ds == 'train':
     
@@ -35,6 +36,7 @@ def get_images_ds(hparams, type_ds):
             batch_size=hparams.batch_size,
             label_mode='categorical'
         )
+    
     return ds
 
 

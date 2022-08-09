@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=KCAteam_cs4321_run
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
 #SBATCH --time=06:00:00
@@ -17,13 +17,15 @@ module load lang/miniconda3/4.10.3
 
 python trainer/task.py \
 --model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S)/" \
---model_type="MobileNetV2_frozen" \
---num_epochs=300 \
+--model_type="MobileNetV2" \
+--num_epochs=4 \
 --batch_size=32 \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
---callback_list="tensor_board, csv_log, checkpoint, learning_rate_scheduler" \
---data_augmentation="random_flip, random_augmentation, MixUp" \
+--callback_list="tensor_board, csv_log, checkpoint" \
+--data_augmentation="random_flip, MixUp" \
+--num_fine_epochs=5 \
+--frozen_layers=100 \
 #--only_test_model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-07_03-29-09/"
 
 

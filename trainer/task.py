@@ -17,6 +17,7 @@
 
 import os
 import sys
+from tabnanny import verbose
 import yaml
 
 import tensorflow as tf
@@ -41,8 +42,6 @@ def main():
 
         # import data
         train_ds = data_class.get_train_ds(hparams)
-
-
         val_ds = data_class.get_val_ds(hparams)
 
         #Generate the model to train
@@ -53,18 +52,33 @@ def main():
                                        loss=hparams.loss_type,
                                        metrics=[hparams.eval_metrics])
         #Train the model
-
         history = model.fit(train_ds,
                             epochs=hparams.num_epochs,
                             validation_data = val_ds,
-                            callbacks=callbacks.make_callbacks(hparams))
+                            callbacks=callbacks.make_callbacks(hparams),
+                            verbose=2)
 
         with open(os.path.join(hparams.model_dir, "history.pickle"), 'wb') as f:
             pickle.dump(history.history, f)
 
         #save model
         model.save(hparams.model_dir+'/'+hparams.model_type.lower())
+        print('report for freezed model')
         report.test_model(hparams,model)
+        model=models.unfreeze_model(hparams, model)
+
+        model.compile(optimizer=optimizers.get_optimizer(hparams),
+                                       loss=hparams.loss_type,
+                                       metrics=[hparams.eval_metrics])
+
+        history_fine = model.fit(train_ds,
+                            epochs=(hparams.num_epochs+hparams.num_fine_epochs),
+                            initial_epoch = hparams.num_epochs,
+                            validation_data = val_ds,
+                            callbacks=callbacks.make_callbacks(hparams),
+                            verbose=2)
+        with open(os.path.join(hparams.model_dir, "history_fine.pickle"), 'wb') as f:
+            pickle.dump(history_fine.history, f)
     else:
         model = tf.keras.models.load_model(hparams.only_test_model_dir+hparams.model_type.lower())
         print('load the trained model')
