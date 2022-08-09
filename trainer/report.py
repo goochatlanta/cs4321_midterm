@@ -14,7 +14,7 @@ def reverse_one_hot(y):
 
 def test_model(hparams, model):
     test_ds = data_class.get_test_ds(hparams)
-    y_pred = model.predict(test_ds)
+    #y_pred = model.predict(test_ds)
     score = model.evaluate(test_ds, verbose = 0) 
     print()
     print('Test loss:', score[0]) 

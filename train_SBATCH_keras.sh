@@ -4,9 +4,9 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --time=06:00:00
+#SBATCH --time=08:00:00
 #SBATCH --output=./logs_hamming/titans-out-%j.txt
-#SBATCH --partition=beards
+#SBATCH --partition=barton
 
 . /etc/profile
 
@@ -17,15 +17,15 @@ source activate tfEnv
 python trainer/task.py \
 --model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S-%N)/" \
 --model_type="MobileNetV2" \
---num_epochs=10 \
+--num_epochs=100 \
 --batch_size=32 \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
 --callback_list="tensor_board, csv_log, checkpoint" \
 --data_augmentation="random_flip, MixUp, random_augmentation" \
---num_fine_epochs=1 \
---unfrozen_layers=70 \
---length_of_dense_layers=400 \
+--num_fine_epochs=40 \
+--unfrozen_layers=90 \
+--length_of_dense_layers=256 \
 #--only_test_model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-07_03-29-09/"
 
 

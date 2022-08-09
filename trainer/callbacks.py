@@ -11,8 +11,6 @@ def make_callbacks(hparams):
         checkpoints.append(_make_csvlog_cb(hparams))
     if 'tensor_board' in hparams.callback_list:
         checkpoints.append(_make_tensorboard(hparams))
-    if 'learning_rate_scheduler'in hparams.callback_list:
-        checkpoints.append(_make_learning_rate_scheduler(hparams))
     return checkpoints
 
 
@@ -48,9 +46,4 @@ def _make_tensorboard(hparams):
     tb_log = tf.keras.callbacks.TensorBoard(log_dir=os.path.join(hparams.model_dir), histogram_freq=1 )
     return tb_log
 
-def _make_learning_rate_scheduler(hparams):
-    print("entered learning_rate_scheduler")
-    lr_scheduler =tf.keras.callbacks.LearningRateScheduler(
-        lambda epoch, lr: lr if epoch < hparams.constant_learning_rate_epochs else lr * tf.math.exp(-0.1) )
-    return lr_scheduler
 
