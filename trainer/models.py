@@ -44,6 +44,13 @@ def create_model_from_app(hparams, model_type):
     #x = tf.keras.layers.Flatten()(x)
     for len in hparams.length_of_dense_layers:
         x = tf.keras.layers.Dense(len, activation='sigmoid')(x)
+    x = tf.keras.layers.Dropout(rate=0.2)(x)
+    for len in hparams.length_of_dense_layers:
+        x = tf.keras.layers.Dense(len/2, activation='sigmoid')(x)
+    x = tf.keras.layers.Dropout(rate=0.2)(x)
+    for len in hparams.length_of_dense_layers:
+        x = tf.keras.layers.Dense(len/2, activation='sigmoid')(x)
+    x = tf.keras.layers.Dropout(rate=0.2)(x)
     preds = tf.keras.layers.Dense(hparams.amount_of_labels, activation='softmax')(x) #final layer with softmax activation
     model = tf.keras.Model(inputs=inputs, outputs=preds)
 
