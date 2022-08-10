@@ -13,9 +13,9 @@ def get_optimizer(hparams):
 
 
     if hparams.optimizer == "SGD":
-        return tf.keras.optimizers.SGD(lr=(hparams.base_learning_rate/10), decay=0.0, momentum=0.9, nesterov=False)
+        return tf.keras.optimizers.SGD(lr=(hparams.base_learning_rate), decay=0.0, momentum=0.9, nesterov=False)
     elif hparams.optimizer == "adam":
-        return tf.keras.optimizers.Adam(lr =(hparams.base_learning_rate*10) )
+        return tf.keras.optimizers.Adam(lr =(hparams.base_learning_rate) )
     else:
         raise ValueError("""optimizer not defined in "get_optimizer" function.""")
 

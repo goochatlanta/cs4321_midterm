@@ -16,9 +16,8 @@ def test_model(hparams, model):
     test_ds = data_class.get_test_ds(hparams)
     #y_pred = model.predict(test_ds)
     score = model.evaluate(test_ds, verbose = 0) 
-    print()
-    print('Test loss:', score[0]) 
-    print('Test accuracy:', score[1])
+    print('\nTest loss:', score[0]) 
+    print('Test accuracy:', score[1],'\n')
 
 
 #def tsne_visualize(x,y):

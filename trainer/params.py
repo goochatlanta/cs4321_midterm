@@ -65,7 +65,7 @@ def make_argparser():
                         help="specify the optimizer for the model")
     parser.add_argument("--callback_list", type=str, default=None,
                         help="the callbacks to be added")
-    parser.add_argument("--base_learning_rate", type=int, default=0.01,
+    parser.add_argument("--base_learning_rate", type=int, default=0.0005,
                         help="specify the base learning rate for the specified optimizer for the model")
     parser.add_argument("--constant_learning_rate_epochs", type=int, default=40,
                         help="specify how many epoch the learning rate will remain constant and not decrease")
@@ -85,7 +85,7 @@ def make_argparser():
                         help="number of CPU's, for my machine 6 workers, for Juno 18")
     parser.add_argument('--data_augmentation_list', type=str, default=None,
                         help='specify the data augmentation type. it can be more than one')
-    parser.add_argument('--only_test_model_dir', type=str, default=None,
+    parser.add_argument('--only_fine_tuning', type=str, default=None,
                         help='specify the folder that contains the model to test')
     parser.add_argument('--num_fine_epochs', type=int, default=40,
                         help="the number of fine tunning epochs")
@@ -93,6 +93,8 @@ def make_argparser():
                         help="how many layers to be unfrozen")
     parser.add_argument('--length_of_dense_layers',nargs="+" ,type=int, default=[200],
                         help="Specifiy the lengths of the dense laeyers before the last softmax")
+    parser.add_argument('--con_fine_tunning' ,type=str, default=None,
+                        help="If you want to keep train the same model")
     return parser.parse_args()
 
 

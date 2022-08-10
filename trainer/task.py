@@ -19,6 +19,7 @@ import os
 import sys
 from tabnanny import verbose
 import yaml
+import glob
 
 import tensorflow as tf
 import params
@@ -31,65 +32,84 @@ import callbacks
 import report
 
 
-
 def main():
 
     hparams = params.get_hparams()
-    if not hparams.only_test_model_dir:
-        if not os.path.exists(hparams.model_dir):
-            os.mkdir(hparams.model_dir)
-        params.save_hparams(hparams)
+    train_ds = data_class.get_train_ds(hparams)
+    val_ds = data_class.get_val_ds(hparams)
+    if not hparams.con_fine_tunning:
 
-        # import data
-        train_ds = data_class.get_train_ds(hparams)
-        val_ds = data_class.get_val_ds(hparams)
+        if not hparams.only_fine_tuning:
+            if not os.path.exists(hparams.model_dir):
+                os.mkdir(hparams.model_dir)
+            params.save_hparams(hparams)
 
-        #Generate the model to train
-        model = models.create_model(hparams)
-        #report.tsne_visualize(train_ds)
+            # import data
 
-        #model.summary()
-        model.compile(optimizer=optimizers.get_optimizer(hparams),
-                                       loss=hparams.loss_type,
-                                       metrics=[hparams.eval_metrics])
-        #Train the model
-        history = model.fit(train_ds,
-                            epochs=hparams.num_epochs,
-                            validation_data = val_ds,
-                            callbacks=callbacks.make_callbacks(hparams),
-                            verbose=2)
+            #Generate the model to train
+            model = models.create_model(hparams)
+            #report.tsne_visualize(train_ds)
 
-        with open(os.path.join(hparams.model_dir, "history.pickle"), 'wb') as f:
-            pickle.dump(history.history, f)
+            #model.summary()
+            model.compile(optimizer=optimizers.get_optimizer(hparams),
+                                           loss=hparams.loss_type,
+                                           metrics=[hparams.eval_metrics])
+            #Train the model
+            history = model.fit(train_ds,
+                                epochs=hparams.num_epochs,
+                                validation_data = val_ds,
+                                callbacks=callbacks.make_callbacks(hparams),
+                                verbose=2)
 
-        #save model
-        model.save(hparams.model_dir+'/'+hparams.model_type.lower())
-        print('report for freezed model')
-        report.test_model(hparams,model)
-        model=models.unfreeze_model(hparams, model)
+            with open(os.path.join(hparams.model_dir, "history.pickle"), 'wb') as f:
+                pickle.dump(history.history, f)
 
-        #change the optimizer
-        hparams.optimizer = 'SGD'
-        
-        model.compile(optimizer=optimizers.get_optimizer(hparams),
-                                       loss=hparams.loss_type,
-                                       metrics=[hparams.eval_metrics])
+            #save model
 
-        history_fine = model.fit(train_ds,
-                            epochs=(hparams.num_epochs+hparams.num_fine_epochs),
-                            initial_epoch = hparams.num_epochs,
-                            validation_data = val_ds,
-                            callbacks=callbacks.make_callbacks(hparams),
-                            verbose=2)
-        with open(os.path.join(hparams.model_dir, "history_fine.pickle"), 'wb') as f:
-            pickle.dump(history_fine.history, f)
-        report.test_model(hparams,model)
 
+            list_of_checkpoints = glob.glob(f'{hparams.model_dir}*checkpoint*')
+            latest_check = max(list_of_checkpoints, key=os.path.getctime)
+            model = tf.keras.models.load_model(latest_check)
+            #save model
+            model.save(hparams.model_dir+'/'+hparams.model_type.lower())
+            print('report for freezed model')
+            report.test_model(hparams,model)
+            fine_tuning(hparams, train_ds, val_ds, model)
+            report.test_model(hparams,model)
+
+        else:
+            #model = tf.keras.models.load_weights(hparams.only_test_model_dir)
+            print('load the frozen model')
+            model = tf.keras.models.load_model(hparams.model_dir+hparams.model_type.lower())
+            fine_tuning(hparams, train_ds, val_ds, model, False)
+            report.test_model(hparams, model)
     else:
-        model = tf.keras.models.load_model(hparams.only_test_model_dir+hparams.model_type.lower())
-        print('load the trained model')
-        hparams.model_dir = hparams.only_test_model_dir
+        print('load the unfrozen model')
+        model = tf.keras.models.load_model(hparams.model_dir+hparams.model_type.lower()+'_unfrozen')
+        fine_tuning(hparams, train_ds, val_ds, model)
         report.test_model(hparams, model)
+
+def fine_tuning(hparams, train_ds, val_ds, model, compile = True):
+    model=models.unfreeze_model(hparams, model)
+    #change the optimizer
+    hparams.optimizer = 'SGD'
+    if compile:
+        model.compile(optimizer=optimizers.get_optimizer(hparams),
+                                       loss=hparams.loss_type,
+                                       metrics=[hparams.eval_metrics])
+    history_fine = model.fit(train_ds,
+                        epochs=(hparams.num_epochs+hparams.num_fine_epochs),
+                        initial_epoch = hparams.num_epochs,
+                        validation_data = val_ds,
+                        callbacks=callbacks.make_callbacks(hparams),
+                        verbose=2)
+    with open(os.path.join(hparams.model_dir, "history_fine.pickle"), 'wb') as f:
+        pickle.dump(history_fine.history, f)
+    list_of_checkpoints = glob.glob(f'{hparams.model_dir}*checkpoint*')
+    latest_check = max(list_of_checkpoints, key=os.path.getctime)
+    model = tf.keras.models.load_model(latest_check)
+    #save model
+    model.save(hparams.model_dir+hparams.model_type.lower()+'_unfrozen')
 
 
 if __name__ == "__main__":
