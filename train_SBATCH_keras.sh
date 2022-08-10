@@ -6,7 +6,7 @@
 #SBATCH --mem=16G
 #SBATCH --time=08:00:00
 #SBATCH --output=./logs_hamming/titans-out-%j.txt
-#SBATCH --partition=barton
+#SBATCH --partition=beards
 
 . /etc/profile
 
@@ -18,12 +18,12 @@ python trainer/task.py \
 --model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S-%N)/" \
 --model_type="MobileNetV2" \
 --num_epochs=100 \
---batch_size=32 \
+--batch_size=64 \
 --eval_metrics="accuracy" \
 --optimizer="adam" \
 --callback_list="tensor_board, csv_log, checkpoint" \
---data_augmentation="random_flip, MixUp, random_augmentation" \
---num_fine_epochs=40 \
+--data_augmentation="random_flip, MixUp" \
+--num_fine_epochs=100 \
 --unfrozen_layers=90 \
 --length_of_dense_layers=256 \
 #--only_test_model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-07_03-29-09/"

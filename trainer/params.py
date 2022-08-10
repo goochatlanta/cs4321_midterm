@@ -65,7 +65,7 @@ def make_argparser():
                         help="specify the optimizer for the model")
     parser.add_argument("--callback_list", type=str, default=None,
                         help="the callbacks to be added")
-    parser.add_argument("--base_learning_rate", type=int, default=0.001,
+    parser.add_argument("--base_learning_rate", type=int, default=0.01,
                         help="specify the base learning rate for the specified optimizer for the model")
     parser.add_argument("--constant_learning_rate_epochs", type=int, default=40,
                         help="specify how many epoch the learning rate will remain constant and not decrease")
