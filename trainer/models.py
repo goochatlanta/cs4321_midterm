@@ -41,21 +41,19 @@ def create_model_from_app(hparams, model_type):
     x= preprocess(inputs)
     x = base_model(x,training=False)
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
-    #x = tf.keras.layers.Flatten()(x)
     for len in hparams.length_of_dense_layers:
-        x = tf.keras.layers.Dense(len, activation='sigmoid')(x)
-    x = tf.keras.layers.Dropout(rate=0.2)(x)
+        x = tf.keras.layers.Dense(len, activation='relu')(x)
+    # x = tf.keras.layers.Dropout(rate=0.2)(x)
     for len in hparams.length_of_dense_layers:
-        x = tf.keras.layers.Dense(len/2, activation='sigmoid')(x)
-    x = tf.keras.layers.Dropout(rate=0.2)(x)
-    for len in hparams.length_of_dense_layers:
-        x = tf.keras.layers.Dense(len/2, activation='sigmoid')(x)
-    x = tf.keras.layers.Dropout(rate=0.2)(x)
+        x = tf.keras.layers.Dense(len/2, activation='relu')(x)
+    # x = tf.keras.layers.Dropout(rate=0.2)(x)
+    # for len in hparams.length_of_dense_layers:
+    #     x = tf.keras.layers.Dense(len/2, activation='relu')(x)
     preds = tf.keras.layers.Dense(hparams.amount_of_labels, activation='softmax')(x) #final layer with softmax activation
     model = tf.keras.Model(inputs=inputs, outputs=preds)
 
 
-    for layer in model.layers[:-2]:
+    for layer in model.layers[:-3]:
         layer.trainable = False
     
     model.summary()
