@@ -53,6 +53,9 @@ def get_test_ds(hparams):
 def get_train_ds(hparams):
     augmentation_type = hparams.model_type.lower()
     dataset = get_images_ds(hparams,'train')
+    if hparams.tsne_ds:
+        return dataset
+
     if hparams.data_augmentation_list:
         data_augmentation_list = []
 
