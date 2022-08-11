@@ -13,7 +13,8 @@ def get_optimizer(hparams):
 
 
     if hparams.optimizer == "SGD":
-        return tf.keras.optimizers.SGD(lr=(hparams.base_learning_rate), decay=0.0, momentum=0.9, nesterov=False)
+        print("####################### SGD lr/2")
+        return tf.keras.optimizers.SGD(lr=(hparams.base_learning_rate/2), decay=0.0, momentum=0.9, nesterov=False)
     elif hparams.optimizer == "adam":
         return tf.keras.optimizers.Adam(lr =(hparams.base_learning_rate) )
     else:

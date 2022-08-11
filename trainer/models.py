@@ -48,7 +48,6 @@ def create_model_from_app(hparams, model_type):
         x = tf.keras.layers.Dense(len, activation='relu')(x)
     #x = tf.keras.layers.Dropout(.2)(x)
     x = tf.keras.layers.Dense(128, activation='relu')(x)
-    x = tf.keras.layers.Dense(64, activation='relu')(x)
     preds = tf.keras.layers.Dense(hparams.amount_of_labels, activation='softmax')(x) #final layer with softmax activation
     model = tf.keras.Model(inputs=inputs, outputs=preds)
 
@@ -74,5 +73,9 @@ def unfreeze_model(hparams,model):
         if hparams.model_type.lower() in layer.name.lower():
             for base_layer in layer.layers[-hparams.unfrozen_layers:]:
                 base_layer.trainable = True
+            for base_layer in layer.layers[:10]:
+                base_layer.trainable = True
+            print('############## 10 first layers unfrozen')
+
     return model
 
