@@ -15,7 +15,7 @@ module load lang/miniconda3/4.10.3
 source activate tfEnv
 
 python trainer/task.py \
-#--model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-10_23-59-07-634273952/" \
+--model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S-%N)/" \
 --model_type="MobileNetV2" \
 --num_epochs=100 \
 --batch_size=16 \
@@ -28,7 +28,7 @@ python trainer/task.py \
 --length_of_dense_layers=256 \
 #--con_fine_tunning='True'
 #--only_fine_tuning='True'
---model_dir="/data/cs4321/KCAteam/models/midterm_$(echo $USER)_$(date +%Y-%m-%d_%H-%M-%S-%N)/" \
+#--model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-10_23-59-07-634273952/" \
 
 
 
