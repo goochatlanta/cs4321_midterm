@@ -93,7 +93,7 @@ def make_argparser():
     parser.add_argument('--unfrozen_layers', type=int, default=70,
                         help="how many layers to be unfrozen")
     # the length of the dense layer before the classifier 
-    parser.add_argument('--length_of_dense_layers',nargs="+" ,type=int, default=[200],
+    parser.add_argument('--length_of_dense_layers' ,type=str, default="256",
                         help="Specifiy the lengths of the dense laeyers before the last softmax")
     # argument to continue trainin
     parser.add_argument('--con_fine_tunning' ,type=str, default=None,

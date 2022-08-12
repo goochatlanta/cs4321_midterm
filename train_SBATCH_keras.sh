@@ -25,7 +25,7 @@ python trainer/task.py \
 --data_augmentation="random_flip, MixUp" \
 --num_fine_epochs=100 \
 --unfrozen_layers=10 \
---length_of_dense_layers=256 \
+--length_of_dense_layers="256" \
 #--con_fine_tunning='True'
 #--only_fine_tuning='True'
 #--model_dir="/data/cs4321/KCAteam/models/midterm_georgios.andrianopoulos.gr_2022-08-10_23-59-07-634273952/" \

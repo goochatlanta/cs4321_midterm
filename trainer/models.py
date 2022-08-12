@@ -55,9 +55,8 @@ def create_model_from_app(hparams, model_type):
     x = base_model(x,training=False)
     # Add a 1 dimenssion layer on the top of the base model
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
-    for len in hparams.length_of_dense_layers:
-        x = tf.keras.layers.Dense(len, activation='relu')(x)
-    x = tf.keras.layers.Dense(128, activation='relu')(x)
+    for l in hparams.length_of_dense_layers.split(','):
+        x = tf.keras.layers.Dense(int(l), activation='relu')(x)
     # Add the classifier
     preds = tf.keras.layers.Dense(hparams.amount_of_labels, activation='softmax')(x)
     model = tf.keras.Model(inputs=inputs, outputs=preds)
