@@ -2,11 +2,23 @@ from re import sub
 import tensorflow as tf
 from tensorflow import keras
 import keras_cv
-
-
+"""
+Data_module
+Description: This module contains functions to get the data from a given directory.
+             The data are not automatically split into different datasets but 
+             there must be one directory for each dataset. It also contains functions 
+             for data augmentation outside the model. The trained data are augmented 
+             if the right arguments are passed
+Data augmentation: random_augmentation, random_flip, MixUp
+"""
 def get_images_ds(hparams, type_ds):
-    
-
+    """
+    Inputs: 
+      hparams: <arg object> the arguments file
+      type_ds: <string> the type of the dataset to load
+    Outputs:
+      Returns the dataset
+    """
     if type_ds == 'train':
     
         ds = tf.keras.preprocessing.image_dataset_from_directory(
@@ -39,23 +51,43 @@ def get_images_ds(hparams, type_ds):
     
     return ds
 
-
-#def get_train_ds(hparams):
-#    return get_images_ds(hparams,'train')
     
-
 def get_val_ds(hparams):
+    """
+    Inputs: 
+      hparams: <arg object> the arguments file
+    
+    Outputs:
+      Returns the validetion dataset    
+    """
     return get_images_ds(hparams, 'validation')
 
 def get_test_ds(hparams):
+    """
+    Inputs: 
+      hparams: <arg object> the arguments file
+    
+    Outputs:
+      Returns the testing dataset
+    """
     return get_images_ds(hparams, 'test')
 
 def get_train_ds(hparams):
+    """
+    Inputs: 
+      hparams: <arg object> the arguments file
+    
+    Outputs:
+      Returns the training dataset. if an data augmentation has been passed
+      It returns the augmented data.
+    """
     augmentation_type = hparams.model_type.lower()
     dataset = get_images_ds(hparams,'train')
+    # If the the dataset is for a tsne use no augmentation will take place
     if hparams.tsne_ds:
         return dataset
 
+    # create a list of layers that contain the type of the augmentaion
     if hparams.data_augmentation_list:
         data_augmentation_list = []
 
@@ -73,13 +105,15 @@ def get_train_ds(hparams):
                 keras_cv.layers.MixUp(alpha=0.3)
             )
         
-        
+        # helping function that will augment the ds. here is where thae augmentation part 
+        # takes pplace
         def augment_data(images,labels):
             inputs = {"images": images, "labels": labels}
             for layer in data_augmentation_list:
                 inputs = layer(inputs)
             return inputs['images'], inputs['labels']
         
+        # map the augmented data
         if len(data_augmentation_list)>0:
             print('Data are augmented')
             dataset = dataset.map(augment_data)

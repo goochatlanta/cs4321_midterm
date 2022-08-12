@@ -49,24 +49,21 @@ def make_argparser():
                         help="path to the checkpoint to continue training")
     parser.add_argument('--predict', type=str2bool, default=False,
                         help="predict from a checkpoint, use checkpoint flag to pass a model")
-#    parser.add_argument('--num_classes', type=int, default=2,
-#                        help="the type of model to use. allowed inputs are fully_connected and cnn")
     parser.add_argument('--seed', type=int, default=1337,
                         help="the seed")
-
     parser.add_argument('--num_epochs', type=int, default=2,
                         help="the number of epochs")
     parser.add_argument('--batch_size', type=int, default=32,
                         help="The batch size to use in the training")
     parser.add_argument('--amount_of_labels', type=int, default=8,
                         help="The amount of lalbels on the last layer")
-
     parser.add_argument("--optimizer", type=str, default="adam",
                         help="specify the optimizer for the model")
     parser.add_argument("--callback_list", type=str, default=None,
                         help="the callbacks to be added")
     parser.add_argument("--base_learning_rate", type=int, default=0.001,
                         help="specify the base learning rate for the specified optimizer for the model")
+    # how many epochs do we want the learning rate not be changed
     parser.add_argument("--constant_learning_rate_epochs", type=int, default=40,
                         help="specify how many epoch the learning rate will remain constant and not decrease")
     parser.add_argument("--loss_type", type=str, default="categorical_crossentropy",
@@ -83,19 +80,27 @@ def make_argparser():
                         help="specifys weather to use use_multiprocessing in .fit_genrator method ")
     parser.add_argument("--workers", type=int, default=6,
                         help="number of CPU's, for my machine 6 workers, for Juno 18")
+    # data augmentation arguments
     parser.add_argument('--data_augmentation_list', type=str, default=None,
                         help='specify the data augmentation type. it can be more than one')
+    # argument to run from the beginning the unfozen model
     parser.add_argument('--only_fine_tuning', type=str, default=None,
                         help='specify the folder that contains the model to test')
+    # how many epochs to train the unfrozen model
     parser.add_argument('--num_fine_epochs', type=int, default=40,
                         help="the number of fine tunning epochs")
+    # number of layers to be unfrozen
     parser.add_argument('--unfrozen_layers', type=int, default=70,
                         help="how many layers to be unfrozen")
+    # the length of the dense layer before the classifier 
     parser.add_argument('--length_of_dense_layers',nargs="+" ,type=int, default=[200],
                         help="Specifiy the lengths of the dense laeyers before the last softmax")
+    # argument to continue trainin
     parser.add_argument('--con_fine_tunning' ,type=str, default=None,
                         help="If you want to keep train the same model")
-    parser.add_argument('--tsne_ds', type=str)
+    # argument to Know if we want to load the dataset for the tsne. no augmentation will be added
+    parser.add_argument('--tsne_ds', type=str,
+                        help="Only for the report")
     return parser.parse_args()
 
 

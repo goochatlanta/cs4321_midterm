@@ -10,10 +10,9 @@ def get_optimizer(hparams):
     :param name: name for optimizer
     :return: TF optimizer
     """
-
-
     if hparams.optimizer == "SGD":
-        print("####################### SGD lr/2")
+        #the learning rate is the half from what is passed
+        print("SGD lr/2")
         return tf.keras.optimizers.SGD(lr=(hparams.base_learning_rate/2), decay=0.0, momentum=0.9, nesterov=False)
     elif hparams.optimizer == "adam":
         return tf.keras.optimizers.Adam(lr =(hparams.base_learning_rate) )
